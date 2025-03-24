@@ -20,6 +20,11 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(parray)
-## basic example code
+## Probability of cylinder and carburetor combinations conditional on numbers of gears
+ptabs(~carb+cyl|gear,data=mtcars)
+## Joint probability of numbers of cyclinders, carburetors and gears
+ptabs(~carb+cyl+gear,data=mtcars)
+## Joint probability as product of conditional and marginal probabilities
+product(ptabs(~cyl+carb|gear,data=mtcars),ptabs(~gear,data=mtcars))
 ```
 
