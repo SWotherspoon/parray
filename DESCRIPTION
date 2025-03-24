@@ -13,3 +13,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/SWotherspoon/parray
+BugReports: https://github.com/SWotherspoon/parray/issues
