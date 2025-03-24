@@ -1,0 +1,87 @@
+---
+title: "Examples"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(parray)
+```
+
+## Introduction
+
+The `parray` package provides a set of functions for manipulating arrays of probabilities that are 
+dependent or conditioned on a set of discrete variables.
+
+
+### mtcars
+
+For the `mtcars` dataset, to calculate the probability of a particular combination of numbers of 
+cylinders and carburetors for a given number of gears $P(\text{cyl},\text{carb}\,|\,\text{gear})$
+```{r}
+ptabs(~carb+cyl|gear,data=mtcars)
+```
+This produces a named array with dimensions `carb`, `cyl` and `gear`.  The marginal 
+probabilities of the number of gears is
+```{r}
+ptabs(~gear,data=mtcars)
+```
+and the product of these conditional and marginal probabilities
+```{r}
+product(ptabs(~cyl+carb|gear,data=mtcars),ptabs(~gear,data=mtcars))
+```
+is the joint distribution of the number cylinders, carburetors and gears
+```{r}
+ptabs(~cyl+carb+gear,data=mtcars)
+```
+
+The `ptabs` function can take a dataframe or a named array as its `data` argument.  If `data` is a 
+named array that is already conditioned on a set of variables, then those conditioning varaibles are 
+retained in the result, but dependent variables that do not appear in the formula are marginalized
+over 
+```{r}
+ptabs(~cyl,data=ptabs(~cyl+carb|gear,data=mtcars))
+```
+
+In the `mtcars` dataset, some combinations of cylinders and carburetors do not occur
+```{r}
+xtabs(~cyl+carb,data=mtcars)
+```
+The conditional probabilities for the missing combinations are undefined and `ptabs` replaces them
+with the value of the `fill` argument.  By default `fill` is zero, but may be a vector or a named 
+array with compatible dimensions
+```{r}
+ptabs(~gear|cyl+carb,data=mtcars,fill=ptabs(~gear|cyl,data=mtcars))
+```
+
+The `ptabs` function is a high level wrapper for `xtabs` and the lower level functions `marginalize` 
+and `condition`.  Construct an array of joint probabilities of numbers of gears, cylinders and 
+carburetors,
+```{r}
+P <- ptabs(~gear+carb+cyl,data=mtcars)
+```
+The `condition` function conditions the array on a specified set of variables.  To calculate
+the conditional probability of the number of cylinders and carburetors given the number of gears
+```{r}
+P <- condition(P,c("gear"))
+P
+```
+The `marginalize` function marginalizes an array to a specified set of variables.  To calculate
+the probability of the number of cylinders conditional on the number of gears
+```{r}
+marginalize(P,c("cyl"))
+```
+
+
+
+

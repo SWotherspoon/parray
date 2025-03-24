@@ -1,0 +1,15 @@
+Package: parray
+Title: Arrays of conditional proportions
+Version: 0.1.0
+Authors@R: 
+    person("Simon", "Wotherspoon", , "Simon.Wotherspoon@aad.gov.au", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-6947-4445"))
+Description: Manipulate arrays of conditional probabilities.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
